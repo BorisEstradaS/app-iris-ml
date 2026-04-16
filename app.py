@@ -5,22 +5,22 @@ import numpy as np
 
 import psycopg2
 # Fetch variables
-USER = "" #os.getenv("user")
-PASSWORD = ""# os.getenv("password")
-HOST = "" #os.getenv("host")
-PORT = "" #os.getenv("port")
-DBNAME = "" #os.getenv("dbname")
+USER = "postgres.amceyyieuxlyqdcdsihx" #os.getenv("user")
+PASSWORD = "Google72025601:3"# os.getenv("password")
+HOST = "aws-1-us-east-2.pooler.supabase.com" #os.getenv("host")
+PORT = "6543" #os.getenv("port")
+DBNAME = "postgres" #os.getenv("dbname")
 
 # Configuración de la página
 st.set_page_config(page_title="Predictor de Iris", page_icon="🌸")
 # Connect to the database
 try:
     connection = psycopg2.connect(
-        user=postgres.amceyyieuxlyqdcdsihx,
-        password=Google72025601:3,
-        host=aws-1-us-east-2.pooler.supabase.com,
-        port=6543,
-        dbname=postgres
+        user=USER,
+        password=PASSWORD,
+        host=HOST,
+        port=PORT,
+        dbname=DBNAME
     )
     print("Connection successful!")
     
