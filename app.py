@@ -93,3 +93,72 @@ if model is not None:
         st.write("Probabilidades:")
         for species, prob in zip(target_names, probabilities):
             st.write(f"- {species}: {prob:.1%}")
+
+#######agregadoo
+def save_prediction(l_s, a_s, l_p, a_p, prediccion):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    query = """
+        INSERT INTO ml.tb_iris
+        (l_p, l_s, a_s, a_p, prediccion)
+        VALUES (%s,%s,%s,%s,%s);
+    """
+
+    cursor.execute(
+        query,
+        (l_p, l_s, a_s, a_p, prediccion)
+    )
+
+    conn.commit()
+    cursor.close()
+
+    import pandas as pd
+
+def load_history():
+
+    conn = get_connection()
+
+    query = """
+        SELECT
+            id,
+            created_at,
+            l_s AS sepal_length,
+            a_s AS sepal_width,
+            l_p AS petal_length,
+            a_p AS petal_width,
+            prediccion
+        FROM ml.tb_iris
+        ORDER BY created_at DESC
+        LIMIT 20;
+    """
+
+    df = pd.read_sql(query, conn)
+    return df
+
+if st.button("Predecir Especie"):
+
+    save_prediction(
+    sepal_length,
+    sepal_width,
+    petal_length,
+    petal_width,
+    predicted_species
+)
+
+st.toast("✅ Predicción guardada")
+
+st.divider()
+st.subheader("📊 Historial de Predicciones")
+
+history = load_history()
+
+if not history.empty:
+    st.dataframe(
+        history,
+        use_container_width=True,
+        hide_index=True
+    )
+else:
+    st.info("Aún no existen predicciones.")
